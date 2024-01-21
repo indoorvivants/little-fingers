@@ -61,17 +61,17 @@ case class GameState(
   private def letterAnimation(letter: Char) =
     val cstr = toCString(letter.toString())
 
-    val ticker = Animations.limitedFrameTracker(10): frame =>
+    val ticker = Animations.limitedFrameTracker(50): frame =>
       DrawText(
         cstr,
         190,
         200,
-        frame * 7 + 20,
+        frame + 30,
         LIGHTGRAY
       )
       AnimationState.Continue
 
-    Animation(0.3.seconds)(ticker)
+    Animation(20.millis)(ticker)
   end letterAnimation
 
   val WHITE =
@@ -142,7 +142,6 @@ case class Animation private (
     else
       val newStart = start + frameTimeInSeconds * 1000
       if newStart >= tickRateInMillis then
-        // val newFraming = AnimationTick(startFrame, startFrame + 1) //startFrame + 1
         val state = f(AnimationTick.NextFrame)
         copy(start = 0.0f, state = state)
       else
@@ -200,7 +199,7 @@ end Animations
 object Animation:
   def apply(tickRate: FiniteDuration)(f: AnimationTick => AnimationState) =
     new Animation(
-      tickRateInMillis = tickRate.toMillis / 1000f,
+      tickRateInMillis = tickRate.toMillis,
       start = 0.0f,
       f,
       AnimationState.Continue
