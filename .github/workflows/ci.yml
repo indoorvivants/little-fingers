@@ -21,7 +21,7 @@ jobs:
 
       - uses: VirtusLab/scala-cli-setup@main
         with:
-          jvm: adopt:17
+          jvm: temurin:17
 
       - name: CI and build the binary
         run: ./build.sc app-platform-release
