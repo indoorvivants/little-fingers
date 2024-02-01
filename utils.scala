@@ -11,4 +11,3 @@ given a(using UnsignedMadness): Conversion[Byte, CUnsignedChar] with
 
 inline def zone[A](inline f: Zone ?=> A): A =
   Zone(z => f(using z))
-

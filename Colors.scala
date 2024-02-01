@@ -2,7 +2,7 @@ import scalanative.unsafe.*
 import raylib.all.*
 
 class Colors(using Zone):
-  def make(r: Int, g: Int, b: Int, alpha: Int = 255) =
+  inline def make(r: Int, g: Int, b: Int, alpha: Int = 255) =
     UnsignedMadness(Color(r.toByte, g.toByte, b.toByte, alpha.toByte))
 
   val LIGHTGRAY = make(100, 100, 100)

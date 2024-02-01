@@ -18,6 +18,8 @@ import raylib.structs.RenderTexture
 
   InitWindow(screenWidth, screenHeight, c"Little Fingers")
 
+  MaximizeWindow()
+
   SetTargetFPS(FPS)
 
   zone:
@@ -38,10 +40,10 @@ import raylib.structs.RenderTexture
     update(
       _.copy(log =
         Option(
-          Animation(1.second)(
+          TimeProcess(1.second, "log state")(
             Animations.ticker(scribe.info(state.toString))
           ).concurrently(
-            Animation(1.second)(
+            TimeProcess(1.second, "log screen size")(
               Animations.ticker(
                 scribe.info(
                   s"Screen: ${GetScreenWidth()}, ${GetScreenHeight()}"
@@ -92,9 +94,7 @@ import raylib.structs.RenderTexture
         WHITE
       )
       update(
-        _.handleKeys(() => GetKeyPressed())
-          .pickNextLetterFromQueue()
-          .draw(GetFrameTime())
+        _.tick(GetFrameTime())
       )
       EndDrawing()
 
