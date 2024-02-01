@@ -1,4 +1,4 @@
-import raylib.all.*
+import raylib.*
 import scalanative.unsafe.*
 import scalanative.unsigned.*
 import scala.concurrent.duration.*

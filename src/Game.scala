@@ -1,4 +1,4 @@
-import raylib.all.*
+import raylib.*
 import scalanative.unsafe.*
 import scala.concurrent.duration.*
 import scala.collection.immutable.Queue
@@ -19,16 +19,26 @@ case class Game(
     if start > CLEANUP_PERIOD.toSeconds then o.simplify() else Some(o)
 
   def tick(frameTimeInSeconds: Float): Game =
-    handleKeys()
+    tickAnimations(frameTimeInSeconds)
+      .handleKeys()
       .pickNextLetterFromQueue()
-      .copy(
-        letterAnimations = letterAnimations
-          .map(_.tick(frameTimeInSeconds))
-          .flatMap(simplifyMaybe),
-        log = log.map(_.tick(frameTimeInSeconds)),
-        start = start + frameTimeInSeconds
-      )
+      .tickAhead(frameTimeInSeconds)
+      .simplifyAnimations()
   end tick
+
+  def tickAnimations(frameTimeInSeconds: Float) =
+    copy(
+      letterAnimations = letterAnimations.map(_.tick(frameTimeInSeconds)),
+      log = log.map(_.tick(frameTimeInSeconds))
+    )
+
+  def tickAhead(frameTimeInSeconds: Float) =
+    copy(
+      start = start + frameTimeInSeconds
+    )
+
+  def simplifyAnimations() =
+    copy(letterAnimations = letterAnimations.flatMap(simplifyMaybe))
 
   /** This method reads up the entire queue of keys backed up by Raylib ,
     * chooses only letters, and adds them to internal queue. The queue is

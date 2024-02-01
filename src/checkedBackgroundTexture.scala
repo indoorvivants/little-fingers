@@ -1,5 +1,5 @@
 import scalanative.unsafe.*
-import raylib.all.*
+import raylib.*
 
 def checkeredBackgroundTexture(
     screenWidth: Int,

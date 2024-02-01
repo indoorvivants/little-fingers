@@ -1,0 +1,16 @@
+*.class
+*.tasty
+.metals
+.scala-build
+.bloop
+.bsp
+.sbt
+*.gch
+.cache
+c-playground
+target
+
+**/target/**
+project/project
+project/metals.sbt
+little-fingers*

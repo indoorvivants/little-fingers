@@ -1,5 +1,5 @@
 import scalanative.unsafe.*
-import raylib.all.*
+import raylib.*
 
 class Colors(using Zone):
   inline def make(r: Int, g: Int, b: Int, alpha: Int = 255) =

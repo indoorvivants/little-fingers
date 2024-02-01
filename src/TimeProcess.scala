@@ -1,4 +1,4 @@
-import raylib.all.*
+import raylib.*
 import scala.concurrent.duration.*
 import TimeProcess.*
 

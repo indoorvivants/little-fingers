@@ -1,10 +1,8 @@
-import raylib.all.*
+import raylib.*
 import scalanative.unsafe.*
 import scalanative.unsigned.*
 import scala.concurrent.duration.*
 import scala.collection.immutable.Queue
-import raylib.enumerations.ConfigFlags
-import raylib.structs.RenderTexture
 
 @main def hello =
   val FPS = 60
