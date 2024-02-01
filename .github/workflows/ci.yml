@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS: ["macos-12", "macos-14", "ubuntu-latest"]
+        OS: ["macos-12", "ubuntu-latest"]
     runs-on: ${{ matrix.OS }}
     steps:
       - uses: actions/checkout@v3
@@ -22,6 +22,9 @@ jobs:
       - uses: VirtusLab/scala-cli-setup@main
         with:
           jvm: temurin:17
+
+      - run: sudo apt install -y xinerama xcursor xorg libglu1-mesa pkg-config          
+        if: startsWith(matrix.os, 'ubuntu-') 
 
       - name: CI and build the binary
         run: ./build.sc app-platform-release
