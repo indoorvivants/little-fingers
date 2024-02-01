@@ -22,6 +22,7 @@ jobs:
       - uses: VirtusLab/scala-cli-setup@main
         with:
           jvm: temurin:17
+          power: true
 
       - run: sudo apt install -y xinerama xcursor xorg libglu1-mesa pkg-config          
         if: startsWith(matrix.os, 'ubuntu-') 
