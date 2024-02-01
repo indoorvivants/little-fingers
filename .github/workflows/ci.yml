@@ -10,14 +10,14 @@ jobs:
   build:
     name: Build (${{ matrix.OS }})
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         OS: ["macos-12", "macos-14", "ubuntu-latest"]
     runs-on: ${{ matrix.OS }}
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 
+
+      - uses: coursier/cache-action@v6
 
       - uses: VirtusLab/scala-cli-setup@main
         with:
