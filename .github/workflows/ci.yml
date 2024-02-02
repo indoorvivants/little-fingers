@@ -34,7 +34,7 @@ jobs:
           jvm: temurin:17
           power: true
 
-      - run: sudo apt install -y xorg libglu1-mesa pkg-config          
+      - run: sudo apt install -y xorg libglu1-mesa pkg-config libxinerama-dev libxinerama1 libxcursor libxcursor-dev
         if: startsWith(runner.os, 'ubuntu-') 
 
       - run: brew install ninja
@@ -52,6 +52,9 @@ jobs:
 
       - name: Print logs
         run: |
-          cat /Users/runner/Library/Caches/sbt-vcpkg/vcpkg/buildtrees/**/*.log
-          cat /home/runner/.cache/sbt-vcpkg/vcpkg/buildtrees/**/*.log
+          if [ $(uname) == "Darwin" ]; then
+            cat /Users/runner/Library/Caches/sbt-vcpkg/vcpkg/buildtrees/**/*.log
+          else 
+            cat /home/runner/.cache/sbt-vcpkg/vcpkg/buildtrees/**/*.log
+          fi
         if: failure()
