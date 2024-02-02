@@ -34,7 +34,7 @@ jobs:
           jvm: temurin:17
           power: true
 
-      - run: sudo apt install -y libglfw3-dev ninja-build
+      - run: sudo apt install -y libglfw3-dev ninja-build libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config
         if: startsWith(matrix.os, 'ubuntu-') 
 
       - run: brew install ninja
