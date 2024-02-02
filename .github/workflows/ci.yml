@@ -26,7 +26,7 @@ jobs:
             ~/Library/Caches/sbt-vcpkg/vcpkg-install
             ~/.cache/sbt-vcpkg/vcpkg-install
             ~/.cache/sbt-vcpkg/vcpkg
-          key: ${{ runner.os }}-sbt-vcpkg
+          key: ${{ matrix.os }}-sbt-vcpkg
 
       - uses: VirtusLab/scala-cli-setup@main
         with:
