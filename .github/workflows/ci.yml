@@ -27,6 +27,9 @@ jobs:
       - run: sudo apt install -y xorg libglu1-mesa pkg-config          
         if: startsWith(matrix.os, 'ubuntu-') 
 
+      - run: brew install ninja
+        if: startsWith(matrix.os, 'macos-') 
+
       - name: CI and build the binary
         run: ./build.sc app-platform-release
 
