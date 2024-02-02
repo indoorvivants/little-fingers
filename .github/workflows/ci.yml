@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS: ["macos-12", "ubuntu-latest"]
+        OS: ["macos-14"] #, "macos-14", "ubuntu-latest"]
     runs-on: ${{ matrix.OS }}
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
           jvm: temurin:17
           power: true
 
-      - run: sudo apt install -y xinerama xcursor xorg libglu1-mesa pkg-config          
+      - run: sudo apt install -y xorg libglu1-mesa pkg-config          
         if: startsWith(matrix.os, 'ubuntu-') 
 
       - name: CI and build the binary
@@ -36,3 +36,7 @@ jobs:
           path: little-fingers-*
           name: ${{ matrix.os }}-binaries
           if-no-files-found: error
+
+      - name: Print logs
+        run: cat /Users/runner/Library/Caches/sbt-vcpkg/vcpkg/buildtrees/**/*.log
+        if: failure()
