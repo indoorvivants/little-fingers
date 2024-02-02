@@ -12,12 +12,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS: ["macos-14"] #, "macos-14", "ubuntu-latest"]
+        # OS: ["macos-14"] #, "macos-14", "ubuntu-latest"]
+        os: ["ubuntu-latest"]
     runs-on: ${{ matrix.OS }}
     steps:
       - uses: actions/checkout@v3
 
       - uses: coursier/cache-action@v6
+
+      - name: Cache vcpkg
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/Library/Caches/sbt-vcpkg/vcpkg-install
+            ~/.cache/sbt-vcpkg/vcpkg-install
+            ~/.cache/sbt-vcpkg/vcpkg
+          key: ${{ runner.os }}-sbt-vcpkg
 
       - uses: VirtusLab/scala-cli-setup@main
         with:
@@ -25,10 +35,10 @@ jobs:
           power: true
 
       - run: sudo apt install -y xorg libglu1-mesa pkg-config          
-        if: startsWith(matrix.os, 'ubuntu-') 
+        if: startsWith(runner.os, 'ubuntu-') 
 
       - run: brew install ninja
-        if: startsWith(matrix.os, 'macos-') 
+        if: startsWith(runner.os, 'macos-') 
 
       - name: CI and build the binary
         run: ./build.sc app-platform-release
@@ -41,5 +51,7 @@ jobs:
           if-no-files-found: error
 
       - name: Print logs
-        run: cat /Users/runner/Library/Caches/sbt-vcpkg/vcpkg/buildtrees/**/*.log
+        run: |
+          cat /Users/runner/Library/Caches/sbt-vcpkg/vcpkg/buildtrees/**/*.log
+          cat /home/runner/.cache/sbt-vcpkg/vcpkg/buildtrees/**/*.log
         if: failure()
