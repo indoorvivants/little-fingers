@@ -141,7 +141,7 @@ case class Game(
           color
         )
 
-      AnimationState.Continue
+      TimeProcess.State.Continue
 
     TimeProcess(5.millis, s"letter $letter")(ticker)
 

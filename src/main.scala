@@ -2,23 +2,23 @@ import raylib.*
 import scalanative.unsafe.*
 import scalanative.unsigned.*
 import scala.concurrent.duration.*
-import scala.collection.immutable.Queue
+
+val FPS = 60
+val ScreenWidth = 1280
+val ScreenHeight = 720
 
 @main def hello =
-  val FPS = 60
-
-  var screenWidth = 1280
-  var screenHeight = 720
-
   val flags = ConfigFlags.FLAG_WINDOW_RESIZABLE | ConfigFlags.FLAG_VSYNC_HINT
 
   SetConfigFlags(flags.value)
 
-  InitWindow(screenWidth, screenHeight, c"Little Fingers")
+  InitWindow(ScreenWidth, ScreenHeight, c"Little Fingers")
 
   MaximizeWindow()
 
   SetTargetFPS(FPS)
+
+  SetExitKey(-1)
 
   zone:
     val colors = Colors()
@@ -33,41 +33,31 @@ import scala.collection.immutable.Queue
 
     val renderTexture = RenderTexture()
 
-    LoadRenderTexture(screenWidth, screenHeight)(renderTexture)
+    LoadRenderTexture(ScreenWidth, ScreenHeight)(renderTexture)
 
-    update(
-      _.copy(log =
-        Option(
-          TimeProcess(1.second, "log state")(
-            Animations.ticker(scribe.info(state.toString))
-          ).concurrently(
-            TimeProcess(1.second, "log screen size")(
-              Animations.ticker(
-                scribe.info(
-                  s"Screen: ${GetScreenWidth()}, ${GetScreenHeight()}"
-                )
-              )
-            )
+    val printState =
+      TimeProcess(1.second, "log state")(
+        Animations.ticker(scribe.info(state.toString))
+      )
+
+    val logScreenSize =
+      TimeProcess(1.second, "log screen size")(
+        Animations.ticker(
+          scribe.info(
+            s"Screen: ${GetScreenWidth()}, ${GetScreenHeight()}"
           )
         )
       )
+
+    update(
+      _.copy(log = Some(printState.concurrently(logScreenSize)))
     )
 
-    val checked = checkeredBackgroundTexture(
-      screenWidth = screenWidth,
-      screenHeight = screenHeight,
+    val checkedBackground = checkeredBackgroundTexture(
+      screenWidth = ScreenWidth,
+      screenHeight = ScreenHeight,
       colors = colors
     )
-
-    BeginTextureMode(renderTexture)
-    ClearBackground(WHITE)
-    DrawTexture(
-      checked,
-      0,
-      0,
-      Fade(WHITE, 0.5f)
-    )
-    EndTextureMode()
 
     inline def ptr[T: Tag](inline value: T): Ptr[T] =
       val p = stackalloc[T](1)
@@ -77,14 +67,14 @@ import scala.collection.immutable.Queue
     while !WindowShouldClose() do
 
       BeginDrawing()
-      DrawFPS(screenWidth - 50, screenHeight - 50)
+      DrawFPS(ScreenWidth - 50, ScreenHeight - 50)
       DrawTexturePro(
-        ptr(checked),
+        ptr(checkedBackground),
         Rectangle(
           0,
           0,
-          (!renderTexture).texture.width.toFloat,
-          (!renderTexture).texture.height.toFloat
+          checkedBackground.width.toFloat,
+          checkedBackground.height.toFloat
         ),
         Rectangle(0, 0, GetScreenWidth(), GetScreenHeight()),
         Vector2(0, 0),
@@ -98,8 +88,7 @@ import scala.collection.immutable.Queue
 
     end while
 
-    UnloadRenderTexture(renderTexture)
-    UnloadTexture(checked)
+    UnloadTexture(checkedBackground)
 
     CloseWindow()
 end hello

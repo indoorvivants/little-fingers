@@ -1,44 +1,39 @@
-import raylib.*
-import scalanative.unsafe.*
-import scalanative.unsigned.*
-import scala.concurrent.duration.*
-import scala.collection.immutable.Queue
-
 object Animations:
+  import TimeProcess.{State, Tick}
 
   def frameTracker(
-      i: Int => AnimationState
-  ): AnimationTick => AnimationState =
+      i: Int => TimeProcess.State
+  ): Tick => TimeProcess.State =
     var state = 0
     tick =>
       tick match
-        case AnimationTick.SameFrame =>
+        case Tick.SameFrame =>
           i(state)
-        case AnimationTick.NextFrame =>
+        case Tick.NextFrame =>
           state += 1
           i(state)
   end frameTracker
 
   def limitedFrameTracker(frames: Int)(
-      i: Int => AnimationState
-  ): AnimationTick => AnimationState =
+      i: Int => TimeProcess.State
+  ): Tick => TimeProcess.State =
     var frameCnt = 0
     tick =>
-      if frameCnt >= frames then AnimationState.Stop
+      if frameCnt >= frames then TimeProcess.State.Stop
       else
         tick match
-          case AnimationTick.SameFrame =>
+          case Tick.SameFrame =>
             i(frameCnt)
-          case AnimationTick.NextFrame =>
+          case Tick.NextFrame =>
             frameCnt += 1
             i(frameCnt)
   end limitedFrameTracker
 
-  def ticker(i: => Unit): AnimationTick => AnimationState =
+  def ticker(i: => Unit): Tick => TimeProcess.State =
     tick =>
       tick match
-        case AnimationTick.NextFrame =>
+        case Tick.NextFrame =>
           i
-          AnimationState.Continue
-        case _ => AnimationState.Continue
+          TimeProcess.State.Continue
+        case _ => TimeProcess.State.Continue
 end Animations

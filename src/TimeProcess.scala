@@ -1,4 +1,3 @@
-import raylib.*
 import scala.concurrent.duration.*
 import TimeProcess.*
 
@@ -31,15 +30,21 @@ sealed trait TimeProcess:
 end TimeProcess
 
 object TimeProcess:
+  enum State:
+    case Stop, Continue
+
+  enum Tick:
+    case SameFrame, NextFrame
+
   def apply(
       tickRate: FiniteDuration,
       name: String | Null = null
-  )(f: AnimationTick => AnimationState): TimeProcess =
+  )(f: Tick => State): TimeProcess =
     SimpleTimeProcess(
       tickRateInMillis = tickRate.toMillis,
       start = 0.0f,
       transition = f,
-      state = AnimationState.Continue,
+      state = State.Continue,
       name = Option(name)
     )
 
@@ -71,8 +76,8 @@ object TimeProcess:
   private case class SimpleTimeProcess(
       tickRateInMillis: Float,
       start: Float,
-      transition: AnimationTick => AnimationState,
-      state: AnimationState,
+      transition: Tick => State,
+      state: State,
       name: Option[String]
   ) extends TimeProcess:
     def tick(frameTimeInSeconds: Float): TimeProcess =
@@ -80,13 +85,13 @@ object TimeProcess:
       else
         val newStart = start + frameTimeInSeconds * 1000
         if newStart >= tickRateInMillis then
-          val state = transition(AnimationTick.NextFrame)
+          val state = transition(Tick.NextFrame)
           copy(start = 0.0f, state = state)
         else
-          val state = transition(AnimationTick.SameFrame)
+          val state = transition(Tick.SameFrame)
           copy(start = newStart, state = state)
 
-    def finished() = state == AnimationState.Stop
+    def finished() = state == State.Stop
 
     override def toString(): String =
       val label = name.getOrElse("<unnamed>")

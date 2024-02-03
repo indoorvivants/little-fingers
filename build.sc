@@ -29,9 +29,12 @@ end match
 def appCommand(platform: Boolean, release: Boolean) =
   val binName =
     if platform then
-      "little-fingers-" + ArtifactNames.coursierString(
-        Platform.target
-      ) + ArtifactNames.ext(Platform.os)
+      val platformExt =
+        ArtifactNames.coursierString(Platform.target) + ArtifactNames.ext(
+          Platform.os
+        )
+
+      "little-fingers-" + platformExt
     else "little-fingers"
 
   coursier.cli.Coursier.main(
