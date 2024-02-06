@@ -23,67 +23,61 @@ val ScreenHeight = 720
   zone:
     val colors = Colors()
 
-    var state = Game(colors = colors, window = Window.Raylib)
+    val window = Window.Raylib
+    var gameState = Game(colors = colors, window = window)
 
-    def update(f: Game => Game) =
-      state = f(state)
-      state
+    inline def updateGame(f: Game => Game) =
+      gameState = f(gameState)
+      gameState
 
     import colors.*
 
-    val renderTexture = RenderTexture()
-
-    LoadRenderTexture(ScreenWidth, ScreenHeight)(renderTexture)
-
     val printState =
       TimeProcess(1.second, "log state")(
-        Animations.ticker(scribe.info(state.toString))
+        Animations.ticker(scribe.info(gameState.toString))
       )
 
     val logScreenSize =
       TimeProcess(1.second, "log screen size")(
         Animations.ticker(
           scribe.info(
-            s"Screen: ${GetScreenWidth()}, ${GetScreenHeight()}"
+            s"Screen: ${window.getWidth()}, ${window.getHeight()}"
           )
         )
       )
 
-    update(
+    updateGame(
       _.copy(log = Some(printState.concurrently(logScreenSize)))
     )
 
-    val checkedBackground = checkeredBackgroundTexture(
+    val checkedBackground: Texture = checkeredBackgroundTexture(
       screenWidth = ScreenWidth,
       screenHeight = ScreenHeight,
       colors = colors
     )
-
-    inline def ptr[T: Tag](inline value: T): Ptr[T] =
-      val p = stackalloc[T](1)
-      !p = value
-      p
 
     while !WindowShouldClose() do
 
       BeginDrawing()
       DrawFPS(ScreenWidth - 50, ScreenHeight - 50)
       DrawTexturePro(
-        ptr(checkedBackground),
-        Rectangle(
+        checkedBackground,
+        !Rectangle(
           0,
           0,
           checkedBackground.width.toFloat,
           checkedBackground.height.toFloat
         ),
-        Rectangle(0, 0, GetScreenWidth(), GetScreenHeight()),
-        Vector2(0, 0),
+        !Rectangle(0, 0, GetScreenWidth(), GetScreenHeight()),
+        !Vector2(0, 0),
         0,
-        WHITE
+        !WHITE
       )
-      update(
+
+      updateGame(
         _.tick(GetFrameTime())
       )
+
       EndDrawing()
 
     end while

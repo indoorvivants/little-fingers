@@ -15,9 +15,18 @@ case class Game(
   import colors.*
   private val CLEANUP_PERIOD = 1.second
 
+  // once every `CLEANUP_PERIOD` we would like to simplify the animation
+  // tree, to make sure there are no dangling non-running processes
   private def simplifyMaybe(o: TimeProcess): Option[TimeProcess] =
     if start > CLEANUP_PERIOD.toSeconds then o.simplify() else Some(o)
 
+  /** This is the main method that advances all time processes in the game, and
+    * modifies internal state w.r.t. human input
+    *
+    * @param frameTimeInSeconds
+    *   time to advance by
+    * @return
+    */
   def tick(frameTimeInSeconds: Float): Game =
     tickAnimations(frameTimeInSeconds)
       .handleKeys()
@@ -26,12 +35,25 @@ case class Game(
       .simplifyAnimations()
   end tick
 
+  /** Advances all running animations (if any) by the given frame time. Also
+    * advances the logger time process
+    *
+    * @param frameTimeInSeconds
+    * @return
+    */
   def tickAnimations(frameTimeInSeconds: Float) =
     copy(
       letterAnimations = letterAnimations.map(_.tick(frameTimeInSeconds)),
       log = log.map(_.tick(frameTimeInSeconds))
     )
+  end tickAnimations
 
+  /** Advances internal clock of the game state, responsible for scheduling
+    * periodic cleanup of dangling animations
+    *
+    * @param frameTimeInSeconds
+    * @return
+    */
   def tickAhead(frameTimeInSeconds: Float) =
     copy(
       start = start + frameTimeInSeconds
@@ -58,7 +80,8 @@ case class Game(
     var hasAny = false
 
     while get() != 0 do
-      if lastKey >= 'A' && lastKey <= 'Z' then
+      if (lastKey >= 'A' && lastKey <= 'Z') || (lastKey >= '0' && lastKey <= '9')
+      then
         chars += lastKey.toChar
         hasAny = true
 
@@ -72,7 +95,7 @@ case class Game(
     *
     * @return
     */
-  def pickNextLetterFromQueue() =
+  def pickNextLetterFromQueue(): Game =
     when(lettersQueue.dequeueOption): (nextChar, rest) =>
       val nextLetterAnimation = letterAnimation(nextChar)
 
@@ -97,15 +120,23 @@ case class Game(
 
   private val font = GetFontDefault()
 
+  /** Constructs a time process representing the animation of a letter appearing
+    *
+    * @param letter
+    *   letter to appear
+    * @return
+    */
   private def letterAnimation(letter: Char): TimeProcess =
     val cstr = toCString(letter.toString())
 
     val numFrames = 100f
 
+    // Initial coordinates where the letter should be placed
     val baseX = Random.nextInt(window.getWidth())
     val baseY = Random.nextInt(window.getHeight())
 
     val baseOpacity = 128
+
     inline def randByte = Random.nextInt(0xff)
 
     val color = make(randByte, randByte, randByte, baseOpacity)

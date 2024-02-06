@@ -2,8 +2,8 @@ object Animations:
   import TimeProcess.{State, Tick}
 
   def frameTracker(
-      i: Int => TimeProcess.State
-  ): Tick => TimeProcess.State =
+      i: Int => State
+  ): Tick => State =
     var state = 0
     tick =>
       tick match
@@ -15,11 +15,11 @@ object Animations:
   end frameTracker
 
   def limitedFrameTracker(frames: Int)(
-      i: Int => TimeProcess.State
-  ): Tick => TimeProcess.State =
+      i: Int => State
+  ): Tick => State =
     var frameCnt = 0
     tick =>
-      if frameCnt >= frames then TimeProcess.State.Stop
+      if frameCnt >= frames then State.Stop
       else
         tick match
           case Tick.SameFrame =>
@@ -29,11 +29,11 @@ object Animations:
             i(frameCnt)
   end limitedFrameTracker
 
-  def ticker(i: => Unit): Tick => TimeProcess.State =
+  def ticker(i: => Unit): Tick => State =
     tick =>
       tick match
         case Tick.NextFrame =>
           i
-          TimeProcess.State.Continue
-        case _ => TimeProcess.State.Continue
+          State.Continue
+        case _ => State.Continue
 end Animations

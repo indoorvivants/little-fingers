@@ -83,7 +83,8 @@ object TimeProcess:
     def tick(frameTimeInSeconds: Float): TimeProcess =
       if finished() then this
       else
-        val newStart = start + frameTimeInSeconds * 1000
+        val frameTimeInMilliseconds = frameTimeInSeconds * 1000
+        val newStart = start + frameTimeInMilliseconds
         if newStart >= tickRateInMillis then
           val state = transition(Tick.NextFrame)
           copy(start = 0.0f, state = state)
