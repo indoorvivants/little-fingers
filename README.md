@@ -3,6 +3,9 @@
 A simple Scala 3 Native application that uses Raylib to render a window where letters are animated when pressed.
 The purpose of this "game" is to distract my toddler who is adamant he needs to smash random keys. I also learned quite a lot making it.
 
+[Blog post](https://blog.indoorvivants.com/2024-02-05-defeating-toddler-with-raylib) | [Tweet](https://twitter.com/velvetbaldmime/status/1755240417900036162)
+
+
 ![CleanShot 2024-02-01 at 22 31 59](https://github.com/indoorvivants/little-fingers/assets/1052965/01ccc0ac-e823-4e49-a3a9-9dc54708b9f9)
 
 
