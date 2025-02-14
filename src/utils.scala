@@ -8,6 +8,3 @@ object UnsignedMadness:
 
 given a(using UnsignedMadness): Conversion[Byte, CUnsignedChar] with
   def apply(x: Byte): CUnsignedChar = x.toInt.toUByte
-
-inline def zone[A](inline f: Zone ?=> A): A =
-  Zone(z => f(using z))

@@ -20,7 +20,7 @@ val ScreenHeight = 720
 
   SetExitKey(-1)
 
-  zone:
+  Zone:
     val colors = Colors()
 
     val window = Window.Raylib
