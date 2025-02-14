@@ -38,9 +38,10 @@ to build a `little-fingers` binary in debug or release configuration
 
 To do this, first obtain and setup the bindgen CLI: https://sn-bindgen.indoorvivants.com/quickstart/index.html
 
-```
-bindgen --package raylib --header raylib-bindings/raylib-amalgam.h --scala --multi-file --out raylib-bindings/
-bindgen --package raylib --header raylib-bindings/raylib-amalgam.h --c --out resources/scala-native/raylib.c --c-import "raylib.h" --c-import "raymath.h"
+```bash 
+sn-bindgen --package raylib --header raylib-bindings/raylib-amalgam.h --scala --multi-file --out raylib-bindings/ --flavour scala-native05 -- -I$(pwd)
+sn-bindgen --package raylib --header raylib-bindings/raylib-amalgam.h --c --out resources/scala-native/raylib.c
+ --c-import "raylib.h" --c-import "raymath.h" --flavour scala-native05 -- -I$(pwd)
 ```
 
 [coursier]: https://get-coursier.io

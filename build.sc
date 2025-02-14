@@ -1,7 +1,7 @@
 #!/usr/bin/env -S scala-cli shebang 
-//> using scala 3.3.1
+//> using scala 3.6.3
 //> using dep io.get-coursier:coursier-cli_2.13:2.1.8
-//> using dep com.indoorvivants.detective::platform::0.0.2
+//> using dep com.indoorvivants.detective::platform::0.1.0
 //> using option -Wunused:all
 
 import com.indoorvivants.detective.Platform, Platform.*
@@ -38,13 +38,31 @@ def appCommand(platform: Boolean, release: Boolean) =
     else "little-fingers"
 
   coursier.cli.Coursier.main(
-    buildArgs(binName, if release then "release-fast" else "debug")
+    buildArgs(binName, if release then "release-fast" else "debug").toArray
   )
 end appCommand
 
 def buildArgs(name: String, mode: String) =
-  s"launch com.indoorvivants.vcpkg:sn-vcpkg_3:0.0.19 -- scala-cli raylib -- package src raylib-bindings resources --native-mode $mode -f -o $name"
-    .split(" ")
+  List(
+    "launch",
+    "com.indoorvivants.vcpkg:sn-vcpkg_3:0.0.21",
+    "--",
+    "scala-cli",
+    "raylib",
+    sys.env.get("VERBOSE").map(_ => "-v"),
+    "--",
+    "package",
+    "src",
+    "raylib-bindings",
+    "resources",
+    "--native-mode",
+    mode,
+    "-f",
+    "-o",
+    name
+  ).flatMap:
+    case s: String             => Some(s)
+    case other: Option[String] => other
 
 object ArtifactNames:
   def jarString(os: Platform.OS): String =

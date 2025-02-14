@@ -42,6 +42,11 @@ _Bool __sn_wrap_raylib_CheckCollisionBoxes(BoundingBox *box1, BoundingBox *box2)
 };
 
 
+_Bool __sn_wrap_raylib_CheckCollisionCircleLine(Vector2 *center, float radius, Vector2 *p1, Vector2 *p2) {
+ return CheckCollisionCircleLine(*center, radius, *p1, *p2);
+};
+
+
 _Bool __sn_wrap_raylib_CheckCollisionCircleRec(Vector2 *center, float radius, Rectangle *rec) {
  return CheckCollisionCircleRec(*center, radius, *rec);
 };
@@ -67,7 +72,7 @@ _Bool __sn_wrap_raylib_CheckCollisionPointLine(Vector2 *point, Vector2 *p1, Vect
 };
 
 
-_Bool __sn_wrap_raylib_CheckCollisionPointPoly(Vector2 *point, Vector2 * points, int pointCount) {
+_Bool __sn_wrap_raylib_CheckCollisionPointPoly(Vector2 *point, const Vector2 * points, int pointCount) {
  return CheckCollisionPointPoly(*point, points, pointCount);
 };
 
@@ -133,6 +138,17 @@ void __sn_wrap_raylib_ColorFromNormalized(Vector4 *normalized, Color *____return
 }
 
 
+_Bool __sn_wrap_raylib_ColorIsEqual(Color *col1, Color *col2) {
+ return ColorIsEqual(*col1, *col2);
+};
+
+
+void __sn_wrap_raylib_ColorLerp(Color *color1, Color *color2, float factor, Color *____return) {
+  Color ____ret = ColorLerp(*color1, *color2, factor);
+  memcpy(____return, &____ret, sizeof(Color));
+}
+
+
 void __sn_wrap_raylib_ColorNormalize(Color *color, Vector4 *____return) {
   Vector4 ____ret = ColorNormalize(*color);
   memcpy(____return, &____ret, sizeof(Vector4));
@@ -161,8 +177,8 @@ void __sn_wrap_raylib_DetachAudioStreamProcessor(AudioStream *stream, AudioCallb
 };
 
 
-void __sn_wrap_raylib_DrawBillboard(Camera *camera, Texture2D *texture, Vector3 *position, float size, Color *tint) {
- DrawBillboard(*camera, *texture, *position, size, *tint);
+void __sn_wrap_raylib_DrawBillboard(Camera *camera, Texture2D *texture, Vector3 *position, float scale, Color *tint) {
+ DrawBillboard(*camera, *texture, *position, scale, *tint);
 };
 
 
@@ -201,8 +217,8 @@ void __sn_wrap_raylib_DrawCircle3D(Vector3 *center, float radius, Vector3 *rotat
 };
 
 
-void __sn_wrap_raylib_DrawCircleGradient(int centerX, int centerY, float radius, Color *color1, Color *color2) {
- DrawCircleGradient(centerX, centerY, radius, *color1, *color2);
+void __sn_wrap_raylib_DrawCircleGradient(int centerX, int centerY, float radius, Color *inner, Color *outer) {
+ DrawCircleGradient(centerX, centerY, radius, *inner, *outer);
 };
 
 
@@ -301,7 +317,7 @@ void __sn_wrap_raylib_DrawLineEx(Vector2 *startPos, Vector2 *endPos, float thick
 };
 
 
-void __sn_wrap_raylib_DrawLineStrip(Vector2 * points, int pointCount, Color *color) {
+void __sn_wrap_raylib_DrawLineStrip(const Vector2 * points, int pointCount, Color *color) {
  DrawLineStrip(points, pointCount, *color);
 };
 
@@ -328,6 +344,16 @@ void __sn_wrap_raylib_DrawModel(Model *model, Vector3 *position, float scale, Co
 
 void __sn_wrap_raylib_DrawModelEx(Model *model, Vector3 *position, Vector3 *rotationAxis, float rotationAngle, Vector3 *scale, Color *tint) {
  DrawModelEx(*model, *position, *rotationAxis, rotationAngle, *scale, *tint);
+};
+
+
+void __sn_wrap_raylib_DrawModelPoints(Model *model, Vector3 *position, float scale, Color *tint) {
+ DrawModelPoints(*model, *position, scale, *tint);
+};
+
+
+void __sn_wrap_raylib_DrawModelPointsEx(Model *model, Vector3 *position, Vector3 *rotationAxis, float rotationAngle, Vector3 *scale, Color *tint) {
+ DrawModelPointsEx(*model, *position, *rotationAxis, rotationAngle, *scale, *tint);
 };
 
 
@@ -386,18 +412,18 @@ void __sn_wrap_raylib_DrawRectangle(int posX, int posY, int width, int height, C
 };
 
 
-void __sn_wrap_raylib_DrawRectangleGradientEx(Rectangle *rec, Color *col1, Color *col2, Color *col3, Color *col4) {
- DrawRectangleGradientEx(*rec, *col1, *col2, *col3, *col4);
+void __sn_wrap_raylib_DrawRectangleGradientEx(Rectangle *rec, Color *topLeft, Color *bottomLeft, Color *topRight, Color *bottomRight) {
+ DrawRectangleGradientEx(*rec, *topLeft, *bottomLeft, *topRight, *bottomRight);
 };
 
 
-void __sn_wrap_raylib_DrawRectangleGradientH(int posX, int posY, int width, int height, Color *color1, Color *color2) {
- DrawRectangleGradientH(posX, posY, width, height, *color1, *color2);
+void __sn_wrap_raylib_DrawRectangleGradientH(int posX, int posY, int width, int height, Color *left, Color *right) {
+ DrawRectangleGradientH(posX, posY, width, height, *left, *right);
 };
 
 
-void __sn_wrap_raylib_DrawRectangleGradientV(int posX, int posY, int width, int height, Color *color1, Color *color2) {
- DrawRectangleGradientV(posX, posY, width, height, *color1, *color2);
+void __sn_wrap_raylib_DrawRectangleGradientV(int posX, int posY, int width, int height, Color *top, Color *bottom) {
+ DrawRectangleGradientV(posX, posY, width, height, *top, *bottom);
 };
 
 
@@ -426,8 +452,13 @@ void __sn_wrap_raylib_DrawRectangleRounded(Rectangle *rec, float roundness, int 
 };
 
 
-void __sn_wrap_raylib_DrawRectangleRoundedLines(Rectangle *rec, float roundness, int segments, float lineThick, Color *color) {
- DrawRectangleRoundedLines(*rec, roundness, segments, lineThick, *color);
+void __sn_wrap_raylib_DrawRectangleRoundedLines(Rectangle *rec, float roundness, int segments, Color *color) {
+ DrawRectangleRoundedLines(*rec, roundness, segments, *color);
+};
+
+
+void __sn_wrap_raylib_DrawRectangleRoundedLinesEx(Rectangle *rec, float roundness, int segments, float lineThick, Color *color) {
+ DrawRectangleRoundedLinesEx(*rec, roundness, segments, lineThick, *color);
 };
 
 
@@ -461,27 +492,27 @@ void __sn_wrap_raylib_DrawSphereWires(Vector3 *centerPos, float radius, int ring
 };
 
 
-void __sn_wrap_raylib_DrawSplineBasis(Vector2 * points, int pointCount, float thick, Color *color) {
+void __sn_wrap_raylib_DrawSplineBasis(const Vector2 * points, int pointCount, float thick, Color *color) {
  DrawSplineBasis(points, pointCount, thick, *color);
 };
 
 
-void __sn_wrap_raylib_DrawSplineBezierCubic(Vector2 * points, int pointCount, float thick, Color *color) {
+void __sn_wrap_raylib_DrawSplineBezierCubic(const Vector2 * points, int pointCount, float thick, Color *color) {
  DrawSplineBezierCubic(points, pointCount, thick, *color);
 };
 
 
-void __sn_wrap_raylib_DrawSplineBezierQuadratic(Vector2 * points, int pointCount, float thick, Color *color) {
+void __sn_wrap_raylib_DrawSplineBezierQuadratic(const Vector2 * points, int pointCount, float thick, Color *color) {
  DrawSplineBezierQuadratic(points, pointCount, thick, *color);
 };
 
 
-void __sn_wrap_raylib_DrawSplineCatmullRom(Vector2 * points, int pointCount, float thick, Color *color) {
+void __sn_wrap_raylib_DrawSplineCatmullRom(const Vector2 * points, int pointCount, float thick, Color *color) {
  DrawSplineCatmullRom(points, pointCount, thick, *color);
 };
 
 
-void __sn_wrap_raylib_DrawSplineLinear(Vector2 * points, int pointCount, float thick, Color *color) {
+void __sn_wrap_raylib_DrawSplineLinear(const Vector2 * points, int pointCount, float thick, Color *color) {
  DrawSplineLinear(points, pointCount, thick, *color);
 };
 
@@ -576,7 +607,7 @@ void __sn_wrap_raylib_DrawTriangle3D(Vector3 *v1, Vector3 *v2, Vector3 *v3, Colo
 };
 
 
-void __sn_wrap_raylib_DrawTriangleFan(Vector2 * points, int pointCount, Color *color) {
+void __sn_wrap_raylib_DrawTriangleFan(const Vector2 * points, int pointCount, Color *color) {
  DrawTriangleFan(points, pointCount, *color);
 };
 
@@ -586,12 +617,12 @@ void __sn_wrap_raylib_DrawTriangleLines(Vector2 *v1, Vector2 *v2, Vector2 *v3, C
 };
 
 
-void __sn_wrap_raylib_DrawTriangleStrip(Vector2 * points, int pointCount, Color *color) {
+void __sn_wrap_raylib_DrawTriangleStrip(const Vector2 * points, int pointCount, Color *color) {
  DrawTriangleStrip(points, pointCount, *color);
 };
 
 
-void __sn_wrap_raylib_DrawTriangleStrip3D(Vector3 * points, int pointCount, Color *color) {
+void __sn_wrap_raylib_DrawTriangleStrip3D(const Vector3 * points, int pointCount, Color *color) {
  DrawTriangleStrip3D(points, pointCount, *color);
 };
 
@@ -623,6 +654,11 @@ unsigned char * __sn_wrap_raylib_ExportImageToMemory(Image *image, const char * 
 
 _Bool __sn_wrap_raylib_ExportMesh(Mesh *mesh, const char * fileName) {
  return ExportMesh(*mesh, fileName);
+};
+
+
+_Bool __sn_wrap_raylib_ExportMeshAsCode(Mesh *mesh, const char * fileName) {
+ return ExportMeshAsCode(*mesh, fileName);
 };
 
 
@@ -780,6 +816,12 @@ void __sn_wrap_raylib_GetCameraMatrix2D(Camera2D *camera, Matrix *____return) {
 }
 
 
+void __sn_wrap_raylib_GetClipboardImage(Image *____return) {
+  Image ____ret = GetClipboardImage();
+  memcpy(____return, &____ret, sizeof(Image));
+}
+
+
 void __sn_wrap_raylib_GetCollisionRec(Rectangle *rec1, Rectangle *rec2, Rectangle *____return) {
   Rectangle ____ret = GetCollisionRec(*rec1, *rec2);
   memcpy(____return, &____ret, sizeof(Rectangle));
@@ -869,12 +911,6 @@ void __sn_wrap_raylib_GetMousePosition(Vector2 *____return) {
 }
 
 
-void __sn_wrap_raylib_GetMouseRay(Vector2 *mousePosition, Camera *camera, Ray *____return) {
-  Ray ____ret = GetMouseRay(*mousePosition, *camera);
-  memcpy(____return, &____ret, sizeof(Ray));
-}
-
-
 void __sn_wrap_raylib_GetMouseWheelMoveV(Vector2 *____return) {
   Vector2 ____ret = GetMouseWheelMoveV();
   memcpy(____return, &____ret, sizeof(Vector2));
@@ -933,6 +969,18 @@ void __sn_wrap_raylib_GetScreenToWorld2D(Vector2 *position, Camera2D *camera, Ve
 }
 
 
+void __sn_wrap_raylib_GetScreenToWorldRay(Vector2 *position, Camera *camera, Ray *____return) {
+  Ray ____ret = GetScreenToWorldRay(*position, *camera);
+  memcpy(____return, &____ret, sizeof(Ray));
+}
+
+
+void __sn_wrap_raylib_GetScreenToWorldRayEx(Vector2 *position, Camera *camera, int width, int height, Ray *____return) {
+  Ray ____ret = GetScreenToWorldRayEx(*position, *camera, width, height);
+  memcpy(____return, &____ret, sizeof(Ray));
+}
+
+
 int __sn_wrap_raylib_GetShaderLocation(Shader *shader, const char * uniformName) {
  return GetShaderLocation(*shader, uniformName);
 };
@@ -941,6 +989,18 @@ int __sn_wrap_raylib_GetShaderLocation(Shader *shader, const char * uniformName)
 int __sn_wrap_raylib_GetShaderLocationAttrib(Shader *shader, const char * attribName) {
  return GetShaderLocationAttrib(*shader, attribName);
 };
+
+
+void __sn_wrap_raylib_GetShapesTexture(Texture2D *____return) {
+  Texture2D ____ret = GetShapesTexture();
+  memcpy(____return, &____ret, sizeof(Texture2D));
+}
+
+
+void __sn_wrap_raylib_GetShapesTextureRectangle(Rectangle *____return) {
+  Rectangle ____ret = GetShapesTextureRectangle();
+  memcpy(____return, &____ret, sizeof(Rectangle));
+}
 
 
 void __sn_wrap_raylib_GetSplinePointBasis(Vector2 *p1, Vector2 *p2, Vector2 *p3, Vector2 *p4, float t, Vector2 *____return) {
@@ -1075,6 +1135,11 @@ void __sn_wrap_raylib_ImageDrawLine(Image * dst, int startPosX, int startPosY, i
 };
 
 
+void __sn_wrap_raylib_ImageDrawLineEx(Image * dst, Vector2 *start, Vector2 *end, int thick, Color *color) {
+ ImageDrawLineEx(dst, *start, *end, thick, *color);
+};
+
+
 void __sn_wrap_raylib_ImageDrawLineV(Image * dst, Vector2 *start, Vector2 *end, Color *color) {
  ImageDrawLineV(dst, *start, *end, *color);
 };
@@ -1120,6 +1185,37 @@ void __sn_wrap_raylib_ImageDrawTextEx(Image * dst, Font *font, const char * text
 };
 
 
+void __sn_wrap_raylib_ImageDrawTriangle(Image * dst, Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *color) {
+ ImageDrawTriangle(dst, *v1, *v2, *v3, *color);
+};
+
+
+void __sn_wrap_raylib_ImageDrawTriangleEx(Image * dst, Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *c1, Color *c2, Color *c3) {
+ ImageDrawTriangleEx(dst, *v1, *v2, *v3, *c1, *c2, *c3);
+};
+
+
+void __sn_wrap_raylib_ImageDrawTriangleFan(Image * dst, Vector2 * points, int pointCount, Color *color) {
+ ImageDrawTriangleFan(dst, points, pointCount, *color);
+};
+
+
+void __sn_wrap_raylib_ImageDrawTriangleLines(Image * dst, Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *color) {
+ ImageDrawTriangleLines(dst, *v1, *v2, *v3, *color);
+};
+
+
+void __sn_wrap_raylib_ImageDrawTriangleStrip(Image * dst, Vector2 * points, int pointCount, Color *color) {
+ ImageDrawTriangleStrip(dst, points, pointCount, *color);
+};
+
+
+void __sn_wrap_raylib_ImageFromChannel(Image *image, int selectedChannel, Image *____return) {
+  Image ____ret = ImageFromChannel(*image, selectedChannel);
+  memcpy(____return, &____ret, sizeof(Image));
+}
+
+
 void __sn_wrap_raylib_ImageFromImage(Image *image, Rectangle *rec, Image *____return) {
   Image ____ret = ImageFromImage(*image, *rec);
   memcpy(____return, &____ret, sizeof(Image));
@@ -1158,23 +1254,23 @@ _Bool __sn_wrap_raylib_IsAudioStreamProcessed(AudioStream *stream) {
 };
 
 
-_Bool __sn_wrap_raylib_IsAudioStreamReady(AudioStream *stream) {
- return IsAudioStreamReady(*stream);
+_Bool __sn_wrap_raylib_IsAudioStreamValid(AudioStream *stream) {
+ return IsAudioStreamValid(*stream);
 };
 
 
-_Bool __sn_wrap_raylib_IsFontReady(Font *font) {
- return IsFontReady(*font);
+_Bool __sn_wrap_raylib_IsFontValid(Font *font) {
+ return IsFontValid(*font);
 };
 
 
-_Bool __sn_wrap_raylib_IsImageReady(Image *image) {
- return IsImageReady(*image);
+_Bool __sn_wrap_raylib_IsImageValid(Image *image) {
+ return IsImageValid(*image);
 };
 
 
-_Bool __sn_wrap_raylib_IsMaterialReady(Material *material) {
- return IsMaterialReady(*material);
+_Bool __sn_wrap_raylib_IsMaterialValid(Material *material) {
+ return IsMaterialValid(*material);
 };
 
 
@@ -1183,13 +1279,8 @@ _Bool __sn_wrap_raylib_IsModelAnimationValid(Model *model, ModelAnimation *anim)
 };
 
 
-_Bool __sn_wrap_raylib_IsModelReady(Model *model) {
- return IsModelReady(*model);
-};
-
-
-_Bool __sn_wrap_raylib_IsMusicReady(Music *music) {
- return IsMusicReady(*music);
+_Bool __sn_wrap_raylib_IsModelValid(Model *model) {
+ return IsModelValid(*model);
 };
 
 
@@ -1198,13 +1289,18 @@ _Bool __sn_wrap_raylib_IsMusicStreamPlaying(Music *music) {
 };
 
 
-_Bool __sn_wrap_raylib_IsRenderTextureReady(RenderTexture2D *target) {
- return IsRenderTextureReady(*target);
+_Bool __sn_wrap_raylib_IsMusicValid(Music *music) {
+ return IsMusicValid(*music);
 };
 
 
-_Bool __sn_wrap_raylib_IsShaderReady(Shader *shader) {
- return IsShaderReady(*shader);
+_Bool __sn_wrap_raylib_IsRenderTextureValid(RenderTexture2D *target) {
+ return IsRenderTextureValid(*target);
+};
+
+
+_Bool __sn_wrap_raylib_IsShaderValid(Shader *shader) {
+ return IsShaderValid(*shader);
 };
 
 
@@ -1213,18 +1309,18 @@ _Bool __sn_wrap_raylib_IsSoundPlaying(Sound *sound) {
 };
 
 
-_Bool __sn_wrap_raylib_IsSoundReady(Sound *sound) {
- return IsSoundReady(*sound);
+_Bool __sn_wrap_raylib_IsSoundValid(Sound *sound) {
+ return IsSoundValid(*sound);
 };
 
 
-_Bool __sn_wrap_raylib_IsTextureReady(Texture2D *texture) {
- return IsTextureReady(*texture);
+_Bool __sn_wrap_raylib_IsTextureValid(Texture2D *texture) {
+ return IsTextureValid(*texture);
 };
 
 
-_Bool __sn_wrap_raylib_IsWaveReady(Wave *wave) {
- return IsWaveReady(*wave);
+_Bool __sn_wrap_raylib_IsWaveValid(Wave *wave) {
+ return IsWaveValid(*wave);
 };
 
 
@@ -1294,6 +1390,12 @@ void __sn_wrap_raylib_LoadImageAnim(const char * fileName, int * frames, Image *
 }
 
 
+void __sn_wrap_raylib_LoadImageAnimFromMemory(const char * fileType, const unsigned char * fileData, int dataSize, int * frames, Image *____return) {
+  Image ____ret = LoadImageAnimFromMemory(fileType, fileData, dataSize, frames);
+  memcpy(____return, &____ret, sizeof(Image));
+}
+
+
 Color * __sn_wrap_raylib_LoadImageColors(Image *image) {
  return LoadImageColors(*image);
 };
@@ -1324,12 +1426,6 @@ Color * __sn_wrap_raylib_LoadImagePalette(Image *image, int maxPaletteSize, int 
 
 void __sn_wrap_raylib_LoadImageRaw(const char * fileName, int width, int height, int format, int headerSize, Image *____return) {
   Image ____ret = LoadImageRaw(fileName, width, height, format, headerSize);
-  memcpy(____return, &____ret, sizeof(Image));
-}
-
-
-void __sn_wrap_raylib_LoadImageSvg(const char * fileNameOrString, int width, int height, Image *____return) {
-  Image ____ret = LoadImageSvg(fileNameOrString, width, height);
   memcpy(____return, &____ret, sizeof(Image));
 }
 
@@ -1447,13 +1543,18 @@ void __sn_wrap_raylib_MatrixAdd(Matrix *left, Matrix *right, Matrix *____return)
 }
 
 
+void __sn_wrap_raylib_MatrixDecompose(Matrix *mat, Vector3 * translation, Quaternion * rotation, Vector3 * scale) {
+ MatrixDecompose(*mat, translation, rotation, scale);
+};
+
+
 float __sn_wrap_raylib_MatrixDeterminant(Matrix *mat) {
  return MatrixDeterminant(*mat);
 };
 
 
-void __sn_wrap_raylib_MatrixFrustum(double left, double right, double bottom, double top, double near, double far, Matrix *____return) {
-  Matrix ____ret = MatrixFrustum(left, right, bottom, top, near, far);
+void __sn_wrap_raylib_MatrixFrustum(double left, double right, double bottom, double top, double nearPlane, double farPlane, Matrix *____return) {
+  Matrix ____ret = MatrixFrustum(left, right, bottom, top, nearPlane, farPlane);
   memcpy(____return, &____ret, sizeof(Matrix));
 }
 
@@ -1614,6 +1715,12 @@ void __sn_wrap_raylib_QuaternionAdd(Quaternion *q1, Quaternion *q2, Quaternion *
 
 void __sn_wrap_raylib_QuaternionAddValue(Quaternion *q, float add, Quaternion *____return) {
   Quaternion ____ret = QuaternionAddValue(*q, add);
+  memcpy(____return, &____ret, sizeof(Quaternion));
+}
+
+
+void __sn_wrap_raylib_QuaternionCubicHermiteSpline(Quaternion *q1, Quaternion *outTangent1, Quaternion *q2, Quaternion *inTangent2, float t, Quaternion *____return) {
+  Quaternion ____ret = QuaternionCubicHermiteSpline(*q1, *outTangent1, *q2, *inTangent2, t);
   memcpy(____return, &____ret, sizeof(Quaternion));
 }
 
@@ -1881,6 +1988,11 @@ void __sn_wrap_raylib_UnloadAudioStream(AudioStream *stream) {
 };
 
 
+void __sn_wrap_raylib_UnloadAutomationEventList(AutomationEventList *list) {
+ UnloadAutomationEventList(*list);
+};
+
+
 void __sn_wrap_raylib_UnloadDirectoryFiles(FilePathList *files) {
  UnloadDirectoryFiles(*files);
 };
@@ -1978,6 +2090,11 @@ void __sn_wrap_raylib_UpdateMeshBuffer(Mesh *mesh, int index, const void * data,
 
 void __sn_wrap_raylib_UpdateModelAnimation(Model *model, ModelAnimation *anim, int frame) {
  UpdateModelAnimation(*model, *anim, frame);
+};
+
+
+void __sn_wrap_raylib_UpdateModelAnimationBones(Model *model, ModelAnimation *anim, int frame) {
+ UpdateModelAnimationBones(*model, *anim, frame);
 };
 
 
@@ -2083,6 +2200,18 @@ float __sn_wrap_raylib_Vector2LineAngle(Vector2 *start, Vector2 *end) {
 };
 
 
+void __sn_wrap_raylib_Vector2Max(Vector2 *v1, Vector2 *v2, Vector2 *____return) {
+  Vector2 ____ret = Vector2Max(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector2));
+}
+
+
+void __sn_wrap_raylib_Vector2Min(Vector2 *v1, Vector2 *v2, Vector2 *____return) {
+  Vector2 ____ret = Vector2Min(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector2));
+}
+
+
 void __sn_wrap_raylib_Vector2MoveTowards(Vector2 *v, Vector2 *target, float maxDistance, Vector2 *____return) {
   Vector2 ____ret = Vector2MoveTowards(*v, *target, maxDistance);
   memcpy(____return, &____ret, sizeof(Vector2));
@@ -2115,6 +2244,12 @@ void __sn_wrap_raylib_Vector2One(Vector2 *____return) {
 
 void __sn_wrap_raylib_Vector2Reflect(Vector2 *v, Vector2 *normal, Vector2 *____return) {
   Vector2 ____ret = Vector2Reflect(*v, *normal);
+  memcpy(____return, &____ret, sizeof(Vector2));
+}
+
+
+void __sn_wrap_raylib_Vector2Refract(Vector2 *v, Vector2 *n, float r, Vector2 *____return) {
+  Vector2 ____ret = Vector2Refract(*v, *n, r);
   memcpy(____return, &____ret, sizeof(Vector2));
 }
 
@@ -2196,6 +2331,12 @@ void __sn_wrap_raylib_Vector3CrossProduct(Vector3 *v1, Vector3 *v2, Vector3 *___
 }
 
 
+void __sn_wrap_raylib_Vector3CubicHermite(Vector3 *v1, Vector3 *tangent1, Vector3 *v2, Vector3 *tangent2, float amount, Vector3 *____return) {
+  Vector3 ____ret = Vector3CubicHermite(*v1, *tangent1, *v2, *tangent2, amount);
+  memcpy(____return, &____ret, sizeof(Vector3));
+}
+
+
 float __sn_wrap_raylib_Vector3Distance(Vector3 *v1, Vector3 *v2) {
  return Vector3Distance(*v1, *v2);
 };
@@ -2252,6 +2393,12 @@ void __sn_wrap_raylib_Vector3Max(Vector3 *v1, Vector3 *v2, Vector3 *____return) 
 
 void __sn_wrap_raylib_Vector3Min(Vector3 *v1, Vector3 *v2, Vector3 *____return) {
   Vector3 ____ret = Vector3Min(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector3));
+}
+
+
+void __sn_wrap_raylib_Vector3MoveTowards(Vector3 *v, Vector3 *target, float maxDistance, Vector3 *____return) {
+  Vector3 ____ret = Vector3MoveTowards(*v, *target, maxDistance);
   memcpy(____return, &____ret, sizeof(Vector3));
 }
 
@@ -2361,6 +2508,132 @@ void __sn_wrap_raylib_Vector3Unproject(Vector3 *source, Matrix *projection, Matr
 void __sn_wrap_raylib_Vector3Zero(Vector3 *____return) {
   Vector3 ____ret = Vector3Zero();
   memcpy(____return, &____ret, sizeof(Vector3));
+}
+
+
+void __sn_wrap_raylib_Vector4Add(Vector4 *v1, Vector4 *v2, Vector4 *____return) {
+  Vector4 ____ret = Vector4Add(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4AddValue(Vector4 *v, float add, Vector4 *____return) {
+  Vector4 ____ret = Vector4AddValue(*v, add);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+float __sn_wrap_raylib_Vector4Distance(Vector4 *v1, Vector4 *v2) {
+ return Vector4Distance(*v1, *v2);
+};
+
+
+float __sn_wrap_raylib_Vector4DistanceSqr(Vector4 *v1, Vector4 *v2) {
+ return Vector4DistanceSqr(*v1, *v2);
+};
+
+
+void __sn_wrap_raylib_Vector4Divide(Vector4 *v1, Vector4 *v2, Vector4 *____return) {
+  Vector4 ____ret = Vector4Divide(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+float __sn_wrap_raylib_Vector4DotProduct(Vector4 *v1, Vector4 *v2) {
+ return Vector4DotProduct(*v1, *v2);
+};
+
+
+int __sn_wrap_raylib_Vector4Equals(Vector4 *p, Vector4 *q) {
+ return Vector4Equals(*p, *q);
+};
+
+
+void __sn_wrap_raylib_Vector4Invert(Vector4 *v, Vector4 *____return) {
+  Vector4 ____ret = Vector4Invert(*v);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+float __sn_wrap_raylib_Vector4Length(Vector4 *v) {
+ return Vector4Length(*v);
+};
+
+
+float __sn_wrap_raylib_Vector4LengthSqr(Vector4 *v) {
+ return Vector4LengthSqr(*v);
+};
+
+
+void __sn_wrap_raylib_Vector4Lerp(Vector4 *v1, Vector4 *v2, float amount, Vector4 *____return) {
+  Vector4 ____ret = Vector4Lerp(*v1, *v2, amount);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Max(Vector4 *v1, Vector4 *v2, Vector4 *____return) {
+  Vector4 ____ret = Vector4Max(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Min(Vector4 *v1, Vector4 *v2, Vector4 *____return) {
+  Vector4 ____ret = Vector4Min(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4MoveTowards(Vector4 *v, Vector4 *target, float maxDistance, Vector4 *____return) {
+  Vector4 ____ret = Vector4MoveTowards(*v, *target, maxDistance);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Multiply(Vector4 *v1, Vector4 *v2, Vector4 *____return) {
+  Vector4 ____ret = Vector4Multiply(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Negate(Vector4 *v, Vector4 *____return) {
+  Vector4 ____ret = Vector4Negate(*v);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Normalize(Vector4 *v, Vector4 *____return) {
+  Vector4 ____ret = Vector4Normalize(*v);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4One(Vector4 *____return) {
+  Vector4 ____ret = Vector4One();
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Scale(Vector4 *v, float scale, Vector4 *____return) {
+  Vector4 ____ret = Vector4Scale(*v, scale);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Subtract(Vector4 *v1, Vector4 *v2, Vector4 *____return) {
+  Vector4 ____ret = Vector4Subtract(*v1, *v2);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4SubtractValue(Vector4 *v, float add, Vector4 *____return) {
+  Vector4 ____ret = Vector4SubtractValue(*v, add);
+  memcpy(____return, &____ret, sizeof(Vector4));
+}
+
+
+void __sn_wrap_raylib_Vector4Zero(Vector4 *____return) {
+  Vector4 ____ret = Vector4Zero();
+  memcpy(____return, &____ret, sizeof(Vector4));
 }
 
 
