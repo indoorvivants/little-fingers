@@ -1,12 +1,14 @@
 # Little Fingers
 
-A simple Scala 3 Native application that uses Raylib to render a window where letters are animated when pressed.
+A simple Scala 3 Native application that uses Raylib to render a window where letters are animated when pressed. Written for a [post in my blog](https://blog.indoorvivants.com/2024-02-05-defeating-toddler-with-raylib).
 The purpose of this "game" is to distract my toddler who is adamant he needs to smash random keys. I also learned quite a lot making it.
 
 [Blog post](https://blog.indoorvivants.com/2024-02-05-defeating-toddler-with-raylib) | [Tweet](https://twitter.com/velvetbaldmime/status/1755240417900036162)
 
 
 ![CleanShot 2024-02-01 at 22 31 59](https://github.com/indoorvivants/little-fingers/assets/1052965/01ccc0ac-e823-4e49-a3a9-9dc54708b9f9)
+
+_Important: The exact state of repository as described in the blogpost is at [this commit](https://github.com/indoorvivants/little-fingers/tree/e70988460e4cabcfc526f1bf7d1b9930865190bd). Since then, Raylib released 5.5 and introduced some breaking changes, so the bindings were updated to reflect that, and Scala Native was updated to 0.5.x_
 
 
 ## Getting started
@@ -41,9 +43,8 @@ to build a `little-fingers` binary in debug or release configuration
 
 To do this, first obtain and setup the bindgen CLI: https://sn-bindgen.indoorvivants.com/quickstart/index.html
 
-```
-bindgen --package raylib --header raylib-bindings/raylib-amalgam.h --scala --multi-file --out raylib-bindings/
-bindgen --package raylib --header raylib-bindings/raylib-amalgam.h --c --out resources/scala-native/raylib.c --c-import "raylib.h" --c-import "raymath.h"
+```bash 
+./build.sc bindings
 ```
 
 [coursier]: https://get-coursier.io

@@ -5,143 +5,131 @@ import _root_.scala.scalanative.unsigned.*
 import _root_.scala.scalanative.libc.*
 import _root_.scala.scalanative.*
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 opaque type AudioCallback = CFuncPtr2[Ptr[Byte], CUnsignedInt, Unit]
-object AudioCallback:
-  given _tag: Tag[AudioCallback] =
-    Tag.materializeCFuncPtr2[Ptr[Byte], CUnsignedInt, Unit]
-  inline def fromPtr(ptr: Ptr[Byte]): AudioCallback = CFuncPtr.fromPtr(ptr)
-  inline def apply(
-      inline o: CFuncPtr2[Ptr[Byte], CUnsignedInt, Unit]
-  ): AudioCallback = o
+object AudioCallback: 
+  given _tag: Tag[AudioCallback] = Tag.materializeCFuncPtr2[Ptr[Byte], CUnsignedInt, Unit]
+  inline def fromPtr(ptr: Ptr[Byte] | CVoidPtr): AudioCallback = CFuncPtr.fromPtr(ptr.asInstanceOf[Ptr[Byte]])
+  inline def apply(inline o: CFuncPtr2[Ptr[Byte], CUnsignedInt, Unit]): AudioCallback = o
   extension (v: AudioCallback)
     inline def value: CFuncPtr2[Ptr[Byte], CUnsignedInt, Unit] = v
-    inline def toPtr: Ptr[Byte] = CFuncPtr.toPtr(v)
-end AudioCallback
+    inline def toPtr: CVoidPtr = CFuncPtr.toPtr(v)
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 type Camera = Camera3D
-object Camera:
+object Camera: 
   given _tag: Tag[Camera] = Camera3D._tag
   inline def apply(inline o: Camera3D): Camera = o
-  extension (v: Camera) inline def value: Camera3D = v
+  extension (v: Camera)
+    inline def value: Camera3D = v
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
-opaque type LoadFileDataCallback =
-  CFuncPtr2[CString, Ptr[CInt], Ptr[CUnsignedChar]]
-object LoadFileDataCallback:
-  given _tag: Tag[LoadFileDataCallback] =
-    Tag.materializeCFuncPtr2[CString, Ptr[CInt], Ptr[CUnsignedChar]]
-  inline def fromPtr(ptr: Ptr[Byte]): LoadFileDataCallback =
-    CFuncPtr.fromPtr(ptr)
-  inline def apply(
-      inline o: CFuncPtr2[CString, Ptr[CInt], Ptr[CUnsignedChar]]
-  ): LoadFileDataCallback = o
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
+opaque type LoadFileDataCallback = CFuncPtr2[CString, Ptr[CInt], Ptr[CUnsignedChar]]
+object LoadFileDataCallback: 
+  given _tag: Tag[LoadFileDataCallback] = Tag.materializeCFuncPtr2[CString, Ptr[CInt], Ptr[CUnsignedChar]]
+  inline def fromPtr(ptr: Ptr[Byte] | CVoidPtr): LoadFileDataCallback = CFuncPtr.fromPtr(ptr.asInstanceOf[Ptr[Byte]])
+  inline def apply(inline o: CFuncPtr2[CString, Ptr[CInt], Ptr[CUnsignedChar]]): LoadFileDataCallback = o
   extension (v: LoadFileDataCallback)
     inline def value: CFuncPtr2[CString, Ptr[CInt], Ptr[CUnsignedChar]] = v
-    inline def toPtr: Ptr[Byte] = CFuncPtr.toPtr(v)
-end LoadFileDataCallback
+    inline def toPtr: CVoidPtr = CFuncPtr.toPtr(v)
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 opaque type LoadFileTextCallback = CFuncPtr1[CString, CString]
-object LoadFileTextCallback:
-  given _tag: Tag[LoadFileTextCallback] =
-    Tag.materializeCFuncPtr1[CString, CString]
-  inline def fromPtr(ptr: Ptr[Byte]): LoadFileTextCallback =
-    CFuncPtr.fromPtr(ptr)
-  inline def apply(
-      inline o: CFuncPtr1[CString, CString]
-  ): LoadFileTextCallback = o
+object LoadFileTextCallback: 
+  given _tag: Tag[LoadFileTextCallback] = Tag.materializeCFuncPtr1[CString, CString]
+  inline def fromPtr(ptr: Ptr[Byte] | CVoidPtr): LoadFileTextCallback = CFuncPtr.fromPtr(ptr.asInstanceOf[Ptr[Byte]])
+  inline def apply(inline o: CFuncPtr1[CString, CString]): LoadFileTextCallback = o
   extension (v: LoadFileTextCallback)
     inline def value: CFuncPtr1[CString, CString] = v
-    inline def toPtr: Ptr[Byte] = CFuncPtr.toPtr(v)
-end LoadFileTextCallback
+    inline def toPtr: CVoidPtr = CFuncPtr.toPtr(v)
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 type Quaternion = Vector4
-object Quaternion:
+object Quaternion: 
   given _tag: Tag[Quaternion] = Vector4._tag
   inline def apply(inline o: Vector4): Quaternion = o
-  extension (v: Quaternion) inline def value: Vector4 = v
+  extension (v: Quaternion)
+    inline def value: Vector4 = v
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 type RenderTexture2D = RenderTexture
-object RenderTexture2D:
+object RenderTexture2D: 
   given _tag: Tag[RenderTexture2D] = RenderTexture._tag
   inline def apply(inline o: RenderTexture): RenderTexture2D = o
-  extension (v: RenderTexture2D) inline def value: RenderTexture = v
+  extension (v: RenderTexture2D)
+    inline def value: RenderTexture = v
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 opaque type SaveFileDataCallback = CFuncPtr3[CString, Ptr[Byte], CInt, Boolean]
-object SaveFileDataCallback:
-  given _tag: Tag[SaveFileDataCallback] =
-    Tag.materializeCFuncPtr3[CString, Ptr[Byte], CInt, Boolean]
-  inline def fromPtr(ptr: Ptr[Byte]): SaveFileDataCallback =
-    CFuncPtr.fromPtr(ptr)
-  inline def apply(
-      inline o: CFuncPtr3[CString, Ptr[Byte], CInt, Boolean]
-  ): SaveFileDataCallback = o
+object SaveFileDataCallback: 
+  given _tag: Tag[SaveFileDataCallback] = Tag.materializeCFuncPtr3[CString, Ptr[Byte], CInt, Boolean]
+  inline def fromPtr(ptr: Ptr[Byte] | CVoidPtr): SaveFileDataCallback = CFuncPtr.fromPtr(ptr.asInstanceOf[Ptr[Byte]])
+  inline def apply(inline o: CFuncPtr3[CString, Ptr[Byte], CInt, Boolean]): SaveFileDataCallback = o
   extension (v: SaveFileDataCallback)
     inline def value: CFuncPtr3[CString, Ptr[Byte], CInt, Boolean] = v
-    inline def toPtr: Ptr[Byte] = CFuncPtr.toPtr(v)
-end SaveFileDataCallback
+    inline def toPtr: CVoidPtr = CFuncPtr.toPtr(v)
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 opaque type SaveFileTextCallback = CFuncPtr2[CString, CString, Boolean]
-object SaveFileTextCallback:
-  given _tag: Tag[SaveFileTextCallback] =
-    Tag.materializeCFuncPtr2[CString, CString, Boolean]
-  inline def fromPtr(ptr: Ptr[Byte]): SaveFileTextCallback =
-    CFuncPtr.fromPtr(ptr)
-  inline def apply(
-      inline o: CFuncPtr2[CString, CString, Boolean]
-  ): SaveFileTextCallback = o
+object SaveFileTextCallback: 
+  given _tag: Tag[SaveFileTextCallback] = Tag.materializeCFuncPtr2[CString, CString, Boolean]
+  inline def fromPtr(ptr: Ptr[Byte] | CVoidPtr): SaveFileTextCallback = CFuncPtr.fromPtr(ptr.asInstanceOf[Ptr[Byte]])
+  inline def apply(inline o: CFuncPtr2[CString, CString, Boolean]): SaveFileTextCallback = o
   extension (v: SaveFileTextCallback)
     inline def value: CFuncPtr2[CString, CString, Boolean] = v
-    inline def toPtr: Ptr[Byte] = CFuncPtr.toPtr(v)
-end SaveFileTextCallback
+    inline def toPtr: CVoidPtr = CFuncPtr.toPtr(v)
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 type Texture2D = Texture
-object Texture2D:
+object Texture2D: 
   given _tag: Tag[Texture2D] = Texture._tag
   inline def apply(inline o: Texture): Texture2D = o
-  extension (v: Texture2D) inline def value: Texture = v
+  extension (v: Texture2D)
+    inline def value: Texture = v
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 type TextureCubemap = Texture
-object TextureCubemap:
+object TextureCubemap: 
   given _tag: Tag[TextureCubemap] = Texture._tag
   inline def apply(inline o: Texture): TextureCubemap = o
-  extension (v: TextureCubemap) inline def value: Texture = v
+  extension (v: TextureCubemap)
+    inline def value: Texture = v
 
-/** [bindgen] header: ./raylib/src/raylib.h
-  */
+/**
+ * [bindgen] header: /Users/velvetbaldmime/projects/indoorvivants/little-fingers/raylib/src/raylib.h
+*/
 opaque type TraceLogCallback = CFuncPtr3[CInt, CString, va_list, Unit]
-object TraceLogCallback:
-  given _tag: Tag[TraceLogCallback] =
-    Tag.materializeCFuncPtr3[CInt, CString, va_list, Unit]
-  inline def fromPtr(ptr: Ptr[Byte]): TraceLogCallback = CFuncPtr.fromPtr(ptr)
-  inline def apply(
-      inline o: CFuncPtr3[CInt, CString, va_list, Unit]
-  ): TraceLogCallback = o
+object TraceLogCallback: 
+  given _tag: Tag[TraceLogCallback] = Tag.materializeCFuncPtr3[CInt, CString, va_list, Unit]
+  inline def fromPtr(ptr: Ptr[Byte] | CVoidPtr): TraceLogCallback = CFuncPtr.fromPtr(ptr.asInstanceOf[Ptr[Byte]])
+  inline def apply(inline o: CFuncPtr3[CInt, CString, va_list, Unit]): TraceLogCallback = o
   extension (v: TraceLogCallback)
     inline def value: CFuncPtr3[CInt, CString, va_list, Unit] = v
-    inline def toPtr: Ptr[Byte] = CFuncPtr.toPtr(v)
-end TraceLogCallback
+    inline def toPtr: CVoidPtr = CFuncPtr.toPtr(v)
 
 type va_list = unsafe.CVarArgList
-object va_list:
+object va_list: 
   val _tag: Tag[va_list] = summon[Tag[unsafe.CVarArgList]]
   inline def apply(inline o: unsafe.CVarArgList): va_list = o
-  extension (v: va_list) inline def value: unsafe.CVarArgList = v
+  extension (v: va_list)
+    inline def value: unsafe.CVarArgList = v

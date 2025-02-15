@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS: ["macos-14", "macos-12"]
+        OS: ["macos-14", "macos-13", "ubuntu-22.04", ubuntu-22.04-arm]
     runs-on: ${{ matrix.OS }}
     steps:
       - uses: actions/checkout@v3
